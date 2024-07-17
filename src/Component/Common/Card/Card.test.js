@@ -1,58 +1,82 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import Card from './Card'; // Adjust the path as necessary
+import { render, fireEvent } from '@testing-library/react';
+import { Provider } from 'react-redux';
+import configureStore from 'redux-mock-store';
+import Card from './Card';
 import { onRemoveData } from '../../../redux/actions/universities';
 
-// Mock useNavigate and useDispatch
-jest.mock('react-router-dom', () => ({
-  useNavigate: jest.fn(),
-}));
-jest.mock('react-redux', () => ({
-  useDispatch: jest.fn(),
-  useSelector: jest.fn(),
+jest.mock('react-redux', () => {
+  const actualReactRedux = jest.requireActual('react-redux');
+  return {
+    ...actualReactRedux,
+    useDispatch: () => jest.fn(),
+  };
+});
+
+jest.mock('react-router-dom', () => {
+  const actualReactRouterDOM = jest.requireActual('react-router-dom');
+  return {
+    ...actualReactRouterDOM,
+    useNavigate: jest.fn(),
+  };
+});
+
+jest.mock('../../../redux/actions/universities', () => ({
+  onRemoveData: jest.fn(),
 }));
 
-describe('Card Component', () => {
-  const mockNavigate = jest.fn();
-  const mockDispatch = jest.fn();
-  const mockState = { list: [] }; // Mock the state if necessary
+const mockStore = configureStore([]);
+
+describe('Card component', () => {
+  let store;
+  let dispatchMock;
+  let navigateMock;
 
   beforeEach(() => {
-    useNavigate.mockReturnValue(mockNavigate);
-    useDispatch.mockReturnValue(mockDispatch);
-    useSelector.mockImplementation((callback) => callback(mockState)); // Mock useSelector
-    jest.clearAllMocks();
+    store = mockStore({});
+    dispatchMock = jest.fn();
+    navigateMock = jest.fn();
+
+    jest.spyOn(require('react-redux'), 'useDispatch').mockReturnValue(dispatchMock);
+    jest.spyOn(require('react-router-dom'), 'useNavigate').mockReturnValue(navigateMock);
   });
 
-  const props = {
-    name: 'Test University',
-    country: 'Test Country',
-    item: { name: 'Test University' },
-    key: '1'
-  };
+  it('renders Card component properly', () => {
+    const { getByText } = render(
+      <Provider store={store}>
+        <Card name="University A" country="Country A" item={{ name: "University A" }} />
+      </Provider>
+    );
 
-  test('renders Card component with correct props', () => {
-    render(<Card {...props} />);
-    expect(screen.getByText('Test University')).toBeInTheDocument();
-    expect(screen.getByText('Country: Test Country')).toBeInTheDocument();
-    expect(screen.getByText('View Details')).toBeInTheDocument();
+    expect(getByText('University A')).toBeInTheDocument();
+    expect(getByText('Country: Country A')).toBeInTheDocument();
+    expect(getByText('View Details')).toBeInTheDocument();
   });
 
-  test('navigates to details page on "View Details" click', () => {
-    render(<Card {...props} />);
-    fireEvent.click(screen.getByText('View Details'));
-    expect(mockNavigate).toHaveBeenCalledWith('/details', { state: props.item, replace: true });
-  });
-
-  test('dispatches onRemoveData action on close button click', () => {
+  it('handles removeHandler correctly', () => {
     jest.useFakeTimers();
-    render(<Card {...props} />);
-    fireEvent.click(screen.getByText('X'));
-    jest.runAllTimers();
-    expect(mockDispatch).toHaveBeenCalledWith(onRemoveData('Test University'));
-    jest.useRealTimers();
+
+    const { getByText } = render(
+      <Provider store={store}>
+        <Card name="University A" country="Country A" item={{ name: "University A" }} />
+      </Provider>
+    );
+
+    fireEvent.click(getByText('X'));
+    jest.advanceTimersByTime(400);
+
+    expect(dispatchMock).toHaveBeenCalledWith(onRemoveData("University A"));
+  });
+
+  it('handles Redirecthandler correctly', () => {
+    const { getByText } = render(
+      <Provider store={store}>
+        <Card name="University A" country="Country A" item={{ name: "University A" }} />
+      </Provider>
+    );
+
+    fireEvent.click(getByText('View Details'));
+
+    expect(navigateMock).toHaveBeenCalledWith('/details', { state: { name: "University A" }, replace: true });
   });
 });
