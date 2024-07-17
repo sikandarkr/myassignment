@@ -6,13 +6,13 @@ const SearchBar = ({ searchTerm }) => {
   const dispatch = useDispatch();
   const handleSearch = useCallback(
     debounce((searchTerm) => {
-      if(searchTerm==""){
-        dispatch( OnClear());
-    }
-    else{
-      dispatch(OnSearch(searchTerm));
-    }
-    }, 300), // Debounce for 300 milliseconds
+      if (searchTerm == "") {
+        dispatch(OnClear());
+      }
+      else {
+        dispatch(OnSearch(searchTerm));
+      }
+    }, 300),
     [OnSearch]
   );
   const handleSearchChange = (event) => {

@@ -1,53 +1,66 @@
 .card {
-    background: inherit;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    position: relative;
-    width:90%;
-    border-radius: 0.5rem;
-    padding:1% 5%;
-    background-color: white;
-    box-shadow: 0px 0px 2px 2px rgba(0, 0, 0, 0.1);
+  background: inherit;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  width: 90%;
+  border-radius: 0.5rem;
+  padding: 1% 5%;
+  background-color: white;
+  box-shadow: 0px 0px 2px 2px rgba(0, 0, 0, 0.1);
 }
 
 
-.itemCard:hover{
+.itemCard:hover {
   cursor: pointer;
 }
+
 .close-button {
-  position:absolute;
+  position: absolute;
   border: none;
   font-size: 16px;
   font-weight: 900;
   background: none;
   cursor: pointer;
   color: red;
-  top:-15px;
-  /* left:10%; */
-  right:-8px;
-  background: gray;
+  top: -15px;
+  right: -8px;
+  border: 1px solid gray;
   border-radius: 50px;
 }
-.card h2{
-    line-height: 0px;
-    -webkit-box-orient: vertical;
-   /* width:100px; */
-    text-overflow: ellipsis;
-    color:black
+
+.card h2 {
+  /* line-height: 5px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: black;
+  text-overflow: clip;
+  max-width: 58%;
+  word-break: break-all; */
+  --max-lines:3;
+  position:relative;
+  max-height: calc(var(--1h)*var(--max-lines));
+  overflow: hidden;
+  padding-right: 1rem;
 }
-.card p{
-    line-height: 0px;
+
+.card p {
+  line-height: 0px;
+
 }
-.view-details-btn{
-    color:rgb(7, 39, 71);
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-weight: 500;
+
+.view-details-btn {
+  color: rgb(7, 39, 71);
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-weight: 500;
 }
-.view-details-btn:hover{
-    cursor: pointer;
-    color:brown;
+
+.view-details-btn:hover {
+  cursor: pointer;
+  color: brown;
 }
+
 /* Animation Logics */
 .effect-container {
   position: relative;

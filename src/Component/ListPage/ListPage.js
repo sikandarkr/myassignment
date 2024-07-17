@@ -1,4 +1,4 @@
-import React, { useEffect ,useCallback } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { debounce } from "lodash";
 import { getUniversities } from '../../redux/actions/universities';
@@ -11,22 +11,9 @@ import './listpage.css';
 const ListPage = () => {
   const dispatch = useDispatch();
   const universities = useSelector(state => state.universities);
-
   useEffect(() => {
-    //   dispatch(getUsers([
-    //     {
-    //       id: 1,
-    //       name: 'Leanne Graham',
-    //       company: {
-    //         name: "Romaguera-Crona",
-    //         catchPhrase: "Multi-layered client-server neural-net",
-    //       }
-    //     }
-    //   ]));
     dispatch(getUniversities());
   }, [])
-
-  console.log("universities...", universities);
 
   return (
     <div className="container">

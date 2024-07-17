@@ -1,23 +1,25 @@
-import React, { useState, useEffect } from "react";
-import {  useLocation, useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import './listdetails.css'
+import React from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import './listdetails.css';
+
 const ListDetails = (props) => {
   const { state } = useLocation();
   const navigate = useNavigate();
-  const redirectBack =()=>{
+  const redirectBack = () => {
     navigate('/', {});
-  }
+  };
   return (
     <div className="listDetails">
-        <p className="page-title-details">Detail Page</p>
+      <div className="page-title-details"><h2>Universities details Page</h2></div>
       <table>
-        <tr>
-          <th>Name</th>
-          <th>State Province</th>
-          <th>Country</th>
-          <th>Country Code</th>
-        </tr>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>State Province</th>
+            <th>Country</th>
+            <th>Country Code</th>
+          </tr>
+        </thead>
         <tbody>
           <tr>
             <td>{state.name}</td>
@@ -27,7 +29,7 @@ const ListDetails = (props) => {
           </tr>
         </tbody>
       </table>
-      <p onClick={redirectBack} class="goback">Go Back</p>
+      <p onClick={redirectBack} className="goback">Go Back</p>
     </div>
   );
 };

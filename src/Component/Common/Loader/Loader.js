@@ -3,8 +3,7 @@ import './loader.css';
 function Loader(){
 
     return(
-        <div className='loader'>
-
+        <div className='loader' role='alert' aria-label='loading'>
         </div>
     )
 }
